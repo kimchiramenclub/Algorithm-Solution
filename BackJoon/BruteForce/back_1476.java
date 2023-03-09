@@ -1,4 +1,4 @@
-package BruteForce;
+package BackJoon.BruteForce;
 
 import java.io.BufferedReader;
 import java.io.IOException;

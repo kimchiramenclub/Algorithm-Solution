@@ -1,4 +1,4 @@
-package BackTracking;
+package BackJoon.BackTracking;
 
 import java.io.*;
 import java.util.StringTokenizer;

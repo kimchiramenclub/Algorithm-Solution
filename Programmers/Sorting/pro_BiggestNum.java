@@ -1,9 +1,8 @@
-package Sorting;
+package Programmers.Sorting;
 
 import java.util.Arrays;
 
-public class pro_K_Number {
-
+public class pro_BiggestNum {
 
     public static void mergeSort(int[] arr, int left, int right) {
         if (left < right) {
@@ -58,7 +57,7 @@ public class pro_K_Number {
             int k = commands[row][2];
 
             // 문제의 요구사항 대로 배열 분할
-            int[] sorted = Arrays.copyOfRange(array, i - 1, j);
+            int[] sorted = Arrays.copyOfRange(array, i - 1, j - 1);
             mergeSort(sorted, 0, sorted.length - 1);
 
             // k번째 값을 답 array에 복사
@@ -69,6 +68,4 @@ public class pro_K_Number {
 
         return answer;
     }
-
-
 }
