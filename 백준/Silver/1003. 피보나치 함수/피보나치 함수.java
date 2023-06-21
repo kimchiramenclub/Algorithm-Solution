@@ -11,6 +11,8 @@ public class Main {
       이미 주어진 값인 fibo(0), fibo(1)의 덧셈을 통해,  새로운 값들인 fibo(2), fibo(3)을 구해 memo하는 방식으로
       fibo(3), fibo(4) , ... fibo(n)까지 순차적으로 구해나갈 수 있음.
 
+      feat. https://st-lab.tistory.com/124  
+
     */
     public static int[][] answer;
         // 0부터 담당할 경우, 40까지 표현하려면 41칸이 필요함.
