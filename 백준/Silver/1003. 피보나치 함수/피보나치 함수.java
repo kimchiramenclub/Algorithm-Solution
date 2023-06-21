@@ -13,6 +13,7 @@ public class Main {
 
     */
     public static int[][] answer;
+        // 0부터 담당할 경우, 40까지 표현하려면 41칸이 필요함.
     public static int[][] memo = new int[41][2];
 
     public static void solution(int[] testCase) {
