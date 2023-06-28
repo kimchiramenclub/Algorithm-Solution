@@ -9,10 +9,10 @@ public class Main {
        - Stack, Queue를 사용하는 방식으로 DFS, BFS 구성
 
      */
-
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     public static boolean[][] graph;
 
-    public static void solution(int N, int M, int V, int[][] links) {
+    public static void solution(int N, int M, int V, int[][] links) throws IOException {
         graph = new boolean[N + 1][N + 1]; // 정점이 1부터 시작하므로, 보정
 
         for (int i = 0; i < M; i++) {
@@ -21,11 +21,11 @@ public class Main {
         }
 
         dfs(N, V);
-        System.out.println();
+        bw.write("\n");
         bfs(N, V);
     }
 
-    public static void dfs(int N, int V) {
+    public static void dfs(int N, int V) throws IOException {
         boolean[] visited = new boolean[N + 1];
         Stack<Integer> stack = new Stack<>();
 
@@ -37,7 +37,7 @@ public class Main {
 
             if (!visited[vertex]) {
                 visited[vertex] = true; // 현재 노드 방문 처리
-                System.out.print(vertex + " ");
+                bw.write(vertex + " ");
                 // 1. 아래 for문에 넣으면 마지막 node는 방문할 곳이 없어서 for문이 돌지 않고, 출력 X
                 // 2. if문을 씌워주지 않으면, 스택을 비우는 과정에서도 출력됨
             }
@@ -53,14 +53,14 @@ public class Main {
         }
     }
 
-    public static void bfs(int N, int V) {
+    public static void bfs(int N, int V) throws IOException {
         boolean[] visited = new boolean[N + 1];
         Queue<Integer> queue = new LinkedList<>();
         queue.offer(V);
 
         while (!queue.isEmpty()) {
             int vertex = queue.poll();
-            System.out.print(vertex + " "); // 스택과 달리 FIFO 구조이므로, 넣은 순서대로 빠져서 조건이 필요 없음.
+            bw.write(vertex + " "); // 스택과 달리 FIFO 구조이므로, 넣은 순서대로 빠져서 조건이 필요 없음.
             visited[vertex] = true; // 현재 노드 방문 처리
 
             for (int i = 1; i <= N; i++) {
@@ -90,5 +90,7 @@ public class Main {
         }
 
         solution(N, M, V, links);
+        bw.flush();
+        bw.close();
     }
 }
