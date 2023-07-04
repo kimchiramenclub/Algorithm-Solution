@@ -4,6 +4,8 @@ import java.util.*;
 public class Main {
 
     /* 해시맵
+    
+            수정 : 메모리, 시간 사용량 적게 하는 방법으로 고쳐보기
      */
     public static Map<Integer, String> pokemon;
     public static Map<String, Integer> pokemon_value;
