@@ -6,6 +6,8 @@ public class Main {
     /* 그래프 탐색
         - 한 연결요소를 다 탐색했을 때, 어떻게 판별할 지? 
         -> dfs로 바로 판별하지 않고, 1~N까지 index를 돌면서 연결요소를 세는 count 메서드 사용.
+        
+        수정 : BFS로도 해보기. DFS는 메모리 사용량이 너무 큼
      */
     public static boolean[] visited;
     public static LinkedList<LinkedList<Integer>> graph = new LinkedList<>();
