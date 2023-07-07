@@ -55,6 +55,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         int N = Integer.parseInt(st.nextToken());
@@ -77,9 +78,11 @@ public class Main {
         solution(N, M, node);
         // 출력부
         for (int y = 1; y <= N; y++) {
-            for (int x = 1; x <= M; x++) System.out.print(map[y][x] + " ");
-            System.out.println();
+            for (int x = 1; x <= M; x++) bw.write(map[y][x] + " ");
+            bw.write("\n");
         }
+        bw.flush();
+        bw.close();
 
     }
 }
