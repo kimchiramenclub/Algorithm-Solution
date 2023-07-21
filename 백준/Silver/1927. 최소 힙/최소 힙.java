@@ -2,31 +2,24 @@ import java.io.*;
 import java.util.PriorityQueue;
 
 public class Main {
-    /**/
+    /*  최소 힙
+    * */
 
-    public static int[] solution(int N, int[] cal){
-        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
-        int[] result = new int[N];
-        int index = 0;
+    public static PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+
+    public static void solution(int N, int[] cal) throws IOException{
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         for (int i = 0; i < N; i++) {
             if (cal[i] == 0) {
-                if (minHeap.isEmpty()) {
-                    result[index++] = 0;
-                } else {
-                    result[index++] = minHeap.poll();
-                }
+                if (minHeap.isEmpty()) bw.write("0\n");
+                else bw.write(minHeap.poll()+"\n");
             } else {
                 minHeap.offer(cal[i]);
             }
         }
-
-        int[] output = new int[index];
-        for (int i = 0; i < index; i++) {
-            output[i] = result[i];
-        }
-
-        return output;
+        bw.flush();
+        bw.close();
     }
 
     public static void main(String[] args) throws IOException {
@@ -39,8 +32,6 @@ public class Main {
             cal[i] = Integer.parseInt(br.readLine());
         }
 
-        for(int ans : solution(N, cal)) bw.write(ans+"\n");
-        bw.flush();
-        bw.close();
+        solution(N, cal);
     }
 }
