@@ -15,6 +15,8 @@ class Main {
         - 큐를 모든 케이스마다 새로 선언하면 memory 문제가 생기므로, clear해서 비우고 재사용
 
         - d1, d2, d3, d4가 순서는 달라도 A,B에 공통으로 있다면 1,2를 배제하도록 최적화도 가능할듯? (나중에)
+        
+        ※ 제출번호 42186316 번의 풀이 한번 뜯어서 이해해보기!
 
     */
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
