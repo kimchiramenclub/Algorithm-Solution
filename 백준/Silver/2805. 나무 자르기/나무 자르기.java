@@ -9,26 +9,31 @@ class Main {
 
         탈출 조건 + boundary?
     */
-
-
+    
     static int solution(int N, int M, int[] trees, int max){
-        return binarySearch(N, M, trees, 0, max);
-    }
+        int answer = 0;
+        int low = 0;
+        int high = max;
 
-    static int binarySearch(int N, int M, int[] trees, int low, int high){
-        // 탈출 조건
-        if(low > high) return high;
+        Loop : while(low <= high){
+            int mid = (low+high)/2;
+            long sum = 0;
 
-        int mid = (low + high) / 2;
-        long sum = 0;
-        for(int i=0;i<N;i++){
-            if(trees[i]-mid > 0) sum += (trees[i]-mid); // 나무 높이가 절단기보다 높으면 절단
-            // M값을 넘는 순간 넘어가게 해서 시행횟수 down  + 음수값 방지
-            if(sum >= M) return binarySearch(N, M, trees, mid+1, high);
+            for(int i=0;i<N;i++){
+                if(trees[i]-mid > 0) sum += (trees[i]-mid); // 나무 높이가 절단기보다 높으면 절단
+                // M값을 넘는 순간 넘어가게 해서 시행횟수 down  + 음수값 방지
+                if(sum >= M){
+                    answer = mid;
+                    low = mid+1;
+                    continue Loop;
+                }
+            }
+            // sum이 M을 넘지 못했을 경우
+            high = mid-1;
         }
-        return binarySearch(N, M, trees, low, mid-1);
+        return answer;
     }
-
+    
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -43,7 +48,6 @@ class Main {
             trees[i] = Integer.parseInt(st.nextToken());
             max = Math.max(max, trees[i]); // 이분탐색의 초기 high 값
         }
-
         System.out.println(solution(N, M, trees, max));
     }
 }
