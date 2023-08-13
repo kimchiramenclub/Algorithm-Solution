@@ -1,41 +1,108 @@
-import java.io.IOException;
-import java.util.Arrays;
+public class Main {
 
-class Main {
-    /*  정렬
-        - System.in.read()로 숫자 읽는 방법 연습
-        - CR : "\r"(커서 맨 앞으로 되돌리기)   LF : "\n"(줄 바꿈)
-        - Windows OS 말고는 LF만으로 줄 바꿈이 됨. CR이 자동화
-     */
+	public static void main(String[] args) throws Exception	{
+		int N = nextInt();
+		MinHeap mh = new MinHeap(N);
+		for(int i = 0; i < N; i++) {
+			mh.add(nextInt());;
+		}
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < N; i++) {
+			sb.append(mh.poll()).append('\n');
+		}
+		System.out.println(sb);
+	}
 
-    public static void main(String[] args) throws IOException {
-        StringBuilder sb = new StringBuilder();
-
-        int N = readInt();
-        int[] array = new int[N];
-
-        for(int i=0;i<N;i++) array[i] = readInt();
-        Arrays.sort(array);
-        for(int i=0;i<N;i++) sb.append(array[i]).append("\n");
-        System.out.println(sb.toString());
+	static final int SIZE = 1 << 13;
+	static byte[] buffer = new byte[SIZE];
+	static int index, size;
+	static int nextInt() throws Exception {
+		int sign = 0;
+    	int n = 0;
+    	byte c;
+    	while ((c = read()) <= 32);
+    	if(c == 45) {
+    		sign = 1;
+    		c = read();
+    	}
+    	do n = (n << 3) + (n << 1) + (c & 15);
+    	while ((c = read()) > 47 && c < 58);
+    	return sign == 0 ? n : ~n + 1;
     }
-
-    // 입력에서 숫자를 읽는 메서드
-    static int readInt() throws IOException {
-        // c,n 변수를 int로 선언하면서, n에는 숫자의 첫 번째 자리인 '1'을 System.in.read()로 읽어옴
-        // c는 선언만 될뿐 initialize가 되지 않은 상태임.
-        // System.in.read() : 입력에서 문자 1개를 읽어옴
-        // & 15 : 숫자 범위('0'~'9')에 있는 문자에 48을 빼서 숫자로 바꾸는 것과 같음
-        int c, sign = 1, n = 0;
-        if((c = System.in.read()) == '-') sign = -1;
-        else n = c & 15;
-
-        // c로 새로운 숫자문자를 받아오면서 white space 문자(ascii 코드 32 미만)인지 아닌 지 체크
-        // << : 쉬프트 연산으로, (<< 1 : * 2^1), (>> 1 : / 2^1)
-        // 즉, <<3 + <<1 은  n * 2^3 + n * 2^1  = n*10 (자릿수 바꾸기)
-        // + (c & 15) : c를 한 자리 숫자로 변환해서 더하기
-        // white space 문자가 나오면 일단 c = System.in.read()로 읽기는 하지만, 직후 탈출하므로 st.nextToken() 같은 역할을 함.
-        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
-        return n * sign;
+	static byte read() throws Exception {
+        if (index == size) {
+            size = System.in.read(buffer, index = 0, SIZE);
+            if (size < 0) buffer[0] = -1;
+        }
+        return buffer[index++];
     }
+}
+
+class MinHeap {
+	int index;
+	int[] heap; // binary tree
+	
+	public MinHeap(int capacity) {
+		this.heap = new int[capacity + 1];
+		this.index = 0;
+	}
+	
+	public int getSize() {
+		return index;
+	}
+	
+	public int peek() {
+		return heap[1];
+	}
+	
+	public void add(int value) {
+		this.heap[++index] = value;
+		int parentIdx, childIdx = index;
+		
+		while((parentIdx = childIdx >> 1) > 0) { // shift up
+			if(value < heap[parentIdx]) {
+	    		heap[childIdx] = heap[parentIdx]; // change
+	    		heap[parentIdx] = value;
+	    		childIdx >>= 1;
+	    	}
+			else break;
+		}
+	}
+	
+	public int poll() {
+		if(index == 0) return 0;
+		
+		int min = this.heap[1];
+		this.heap[1] = this.heap[index--];
+		int parentIdx = 1, leftIdx, rightIdx, parent, left, right;
+		while((leftIdx = parentIdx << 1) <= index) {
+			parent = heap[parentIdx];
+			left = heap[leftIdx];
+			
+			if((rightIdx = leftIdx + 1) <= index) {
+				right = heap[rightIdx];
+				
+				if(left < right && left < parent) { // left
+					heap[parentIdx] = left;
+					heap[leftIdx] = parent;
+					parentIdx = leftIdx;
+				}
+				else if(right < parent) { // right
+					heap[parentIdx] = right;
+					heap[rightIdx] = parent;
+					parentIdx = rightIdx;
+				}
+				else break;
+			}
+			else {
+				if(left < parent) {
+					heap[parentIdx] = left;
+					heap[leftIdx] = parent;
+				}
+				break;
+			}
+		}
+		
+		return min;
+	}
 }
