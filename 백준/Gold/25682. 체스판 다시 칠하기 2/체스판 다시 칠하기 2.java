@@ -20,70 +20,40 @@ public class Main {
           이런 보정도 추가로 필요함.
 
           2개의 누적합 배열 값 중 더 작은 값을 사용
+
+
+          수정 :
+          - System.in.read로 char를 받던걸 BufferedReader로 받고, charAt으로 조회하도록 변경
+            입력 문자열이 길 때는 System.in.read는 스트림에서 한 바이트씩 읽음
+            BufferedReader는 버퍼로 받아놓고 버퍼에서 데이터를 가져오므로 시스템 호출이 적음.
+          - board를 받을 때부터 WB 패턴과 비교해서, 칠해야 하는 칸들을 1, 아닌 칸들을 0으로
+          - board를 재활용해서 누적합 배열로
      * */
 
-    static int solution(int N, int M, int size, boolean[][] board) throws IOException {
+    static int solution(int N, int M, int size, int[][] board) throws IOException {
         int answer = Integer.MAX_VALUE;
 
-        boolean[] WB = {true, false}; // WBWBWBWB.... 패턴
-
-        int[][] sumWB = new int[N][M]; // WB패턴과 일치하지 않아서, 다시 칠할 정사각형 갯수 누적합
-        int[][] sumBW = new int[N][M]; // BW패턴과 일치하지 않아서, 다시 칠할 정사각형 갯수 누적합
-
-        int idx = 0; // 해당 칸의 패턴을 정해주는 index
-
-        for (int i = 0; i < N; i++) {
-            idx = i % 2; // 세로 줄 패턴
-            for (int j = 0; j < M; j++) {
-                // 현재 위치의 값 업데이트
-                if (board[i][j] == WB[idx]) sumBW[i][j]++;
-                else sumWB[i][j]++;
-                // 이전 행의 누적합을 더하기
-                if (i > 0) {
-                    sumBW[i][j] += sumBW[i - 1][j];
-                    sumWB[i][j] += sumWB[i - 1][j];
-                }
-                // 이전 열의 누적합을 더하기
-                if(j > 0) {
-                    sumBW[i][j] += sumBW[i][j - 1];
-                    sumWB[i][j] += sumWB[i][j - 1];
-                }
-                // 이전 행과 이전 열의 교차점의 누적합을 빼기 (중복 제거)
-                if(i > 0 && j > 0){
-                    sumBW[i][j] -= sumBW[i-1][j-1];
-                    sumWB[i][j] -= sumWB[i-1][j-1];
-                }
-                idx ^= 1; // XOR 연산으로 패턴 변경. 0이면 1,  1이면 0으로 변환
+        for(int i=0;i<N;i++){
+            for(int j=0;j<M;j++){
+                if(i>0) board[i][j] += board[i-1][j];
+                if(j>0) board[i][j] += board[i][j-1];
+                if(i>0 && j > 0) board[i][j] -= board[i-1][j-1];
             }
         }
 
-        int totalWB = 0; // WB 패턴일 때 칠해야 할 칸의 수
-        int totalBW = 0; // BW 패턴일 때 칠해야 할 칸의 수
-
+        int total;
         // 체스판 구역을 정하기
         for (int i = size -1; i < N; i++) {
             for (int j = size - 1; j < M; j++) {
-                totalWB = sumWB[i][j];
-                totalBW = sumBW[i][j];
-                // 체스판이 아래쪽으로 치우쳤다면
-                if(i > size -1) {
-                    // 체스판에 포함되지 않은 상단 줄은 빼줌
-                    totalWB -= sumWB[i-size][j];
-                    totalBW -= sumBW[i-size][j];
-                }
-                // 체스판이 오른쪽으로 치우쳤다면
-                if(j > size - 1){
-                    // 체스판에 포함되지 않은 왼쪽 줄은 빼줌
-                    totalWB -= sumWB[i][j-size];
-                    totalBW -= sumBW[i][j-size];
-                }
+                total = board[i][j];
+                // 체스판이 아래쪽으로 치우쳤다면 체스판에 포함되지 않은 상단 줄은 빼줌
+                if(i > size -1) total -= board[i-size][j];
+                // 체스판이 오른쪽으로 치우쳤다면 체스판에 포함되지 않은 왼쪽 줄은 빼줌
+                if(j > size -1) total -= board[i][j-size];
                 // 누적합을 뺄 때 중복 구간은 다시 +
-                if(i > size -1 && j > size - 1){
-                    totalWB += sumWB[i-size][j-size];
-                    totalBW += sumBW[i-size][j-size];
-                }
+                if(i > size -1 && j > size - 1) total += board[i-size][j-size];
                 // 체스판의 2 패턴(BW, WB) 중 최소로 칠해야 하는 패턴
-                answer = Math.min(answer, Math.min(totalWB, totalBW));
+                answer = Math.min(answer, reversePattern(size, total));
             }
         }
 
@@ -92,20 +62,27 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        int N = readInt();
-        int M = readInt();
-        int K = readInt();
-        boolean[][] board = new boolean[N][M];
+        int N = readInt();  int M = readInt(); int K = readInt();
+        int[][] board = new int[N][M];
 
         for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) board[i][j] = readChar();
-            readChar(); // 줄바꿈 문자 넘기기
+            for (int j = 0; j < M; j++){
+                if((i+j)%2 == 0) board[i][j] = readChar() ? 0 : 1;
+                else board[i][j] = readChar() ? 1 : 0;
+            }
+            readChar();
         }
-
         System.out.println(solution(N, M, K, board) + "\n");
     }
 
-    // W면 true, B면 false return
+    // 최대의 칸을 칠해야 하는 최악의 케이스랑 비교해서
+    // 만약 그보다 더 칠해야한다면, 패턴을 바꿔서 덜 칠하게 하기
+    static int reversePattern(int K, int total){
+        int mid = K * K / 2;
+        if(total > mid) return K*K - total;
+        else return total;
+    }
+
     static boolean readChar() throws IOException {
         return System.in.read() == 'W';
     }
