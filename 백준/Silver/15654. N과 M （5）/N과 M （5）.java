@@ -6,7 +6,8 @@ class Main {
         */
     static int[] num;
     static boolean[] visited;
-    static ArrayList<Integer> numSeq = new ArrayList<>();
+    static int[] numSeq;
+    static StringBuilder sb = new StringBuilder();
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
     static void solution(int N, int M) throws IOException {
@@ -17,8 +18,8 @@ class Main {
     static void printSeq(int N, int M, int depth) throws IOException{
         // M개만큼 출력할 수열이 모이면, Arraylist를 사용해 출력
         if(depth >= M){
-           for(int num : numSeq) bw.write(num+" ");
-           bw.newLine();
+           for(int seq : numSeq) sb.append(seq).append(" ");
+           sb.append("\n");
            return;
         }
 
@@ -27,12 +28,11 @@ class Main {
             if(!visited[i]){
                 // 방문처리 + 수열 add
                 visited[i] = true;
-                numSeq.add(num[i]);
+                numSeq[depth] = num[i];
                 // 수열의 다음 숫자 재귀로 정하기
                 printSeq(N, M, depth+1);
-                // 백트래킹해서 돌아오면, 수열 숫자 제거 후 새로운 숫자 대입
+                // 백트래킹해서 돌아오면, 방문처리 제거
                 visited[i] = false;
-                numSeq.remove(numSeq.size()-1);
             }
         }
     }
@@ -42,12 +42,14 @@ class Main {
 
         num = new int[N];
         visited = new boolean[N];
+        numSeq = new int[M];
 
         for(int i=0;i<N;i++) num[i] = readInt();
         Arrays.sort(num);
 
         solution(N, M);
-        bw.flush();
+        bw.write(sb.toString());
+        bw.close();
     }
 
     // 입력에서 숫자를 읽는 메서드
