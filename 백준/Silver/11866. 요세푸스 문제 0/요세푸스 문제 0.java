@@ -6,6 +6,9 @@ class Main {
         - 큐에 순서대로 숫자들 넣음
         - K-1만큼 offer(poll)을 이용해서 앞의 숫자들을 뒤로 보내면서 순회
           K번 째에 poll해서 프린트
+          
+         - Arraylist에 다 넣은 다음에, size를 줄여가면서 index를 K만큼 옮겨서
+           index  = (index+K)%size 이런 식도 가능할듯
      */
 
     public static void main(String[] args) throws IOException {
