@@ -39,7 +39,9 @@ class Main {
             return;
         }
 
+        // for문 사이클이 한번 다 돌았으므로, 아예 다른 수열임. 그러므로 초기화
         prevNum[depth] = 0; // int prev = 0;
+        
         for (int i = 0; i < N; i++) {
             // 수열에 사용한 숫자는 pass
             // 각 자리마다
