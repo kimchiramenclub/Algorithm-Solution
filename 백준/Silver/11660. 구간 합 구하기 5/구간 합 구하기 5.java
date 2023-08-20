@@ -5,6 +5,9 @@ import java.util.StringTokenizer;
 
 class Main {
     /*  누적합
+        - 이 문제의 경우, whitespace가 딱 1개씩 이어지는 게 아니라서 readInt를 그대로 쓰면 에러 생김.
+          그리고, M <= 100000 인 만큼, 비트 하나하나씩 읽으려고 하면 시간초과.
+          BufferedReader랑 StringTokenizer 쓰는 게 훨씬 나음.
      */
 
     public static void main(String[] args) throws IOException {
