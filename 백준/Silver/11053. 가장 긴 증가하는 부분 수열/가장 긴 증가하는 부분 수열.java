@@ -47,23 +47,20 @@ class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int N = Integer.parseInt(br.readLine());
+        int N = readInt();
         seq = new int[N];
 
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
         for(int i=0;i<N;i++){
-            seq[i] = Integer.parseInt(st.nextToken());
+            seq[i] = readInt();
         }
 
         System.out.println(solution(N));
     }
 
-    // 한 줄에 최대 1000개까지의 입력이 주어지므로, 비효율적
-//    static int readInt() throws IOException {
-//        int c, n = 0;
-//        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 2) + (c & 15);
-//        return n;
-//    }
+    static int readInt() throws IOException {
+        int c, n = 0;
+        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 2) + (c & 15);
+        return n;
+    }
 }
