@@ -52,9 +52,8 @@ class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int V = Integer.parseInt(br.readLine());
+        int V = readInt();
 
         // 트리 초기화
         tree = new ArrayList<>(V + 1);
@@ -64,19 +63,27 @@ class Main {
 
         // 간선 정보 입력
         for (int i = 1; i <= V; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int n = Integer.parseInt(st.nextToken()); // 정점 번호 pass
+            int n = readInt(); // 정점 번호 pass
 
             while(true){
-                int node = Integer.parseInt(st.nextToken());
+                int node = readInt();
                 if(node == -1) break;   // -1이 나올 경우 break
-                int distance = Integer.parseInt(st.nextToken());
+                int distance = readInt();
 
                 tree.get(n).add(new Edge(node, distance));
             }
         }
         // 출력
         System.out.println(solution(V));
+    }
+
+    // 입력에서 숫자를 읽는 메서드
+    static int readInt() throws IOException {
+        int c, n = 0, sign = 1;
+        if((c = System.in.read()) == '-') sign = -1;
+        else n = c & 15;
+        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        return n * sign;
     }
 
     // 간선 정보를 저장하는 클래스
