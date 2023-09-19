@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.util.*;
 
 class Main {
     /*  배낭 문제
@@ -12,41 +11,33 @@ class Main {
 
         문제 : Hashmap에서 ConcurrentModificationException(for문 돌면서 바로바로 수정) 하는 error 생김.
         수정 : temporary Hashmap을 선언해가면서 사용
-      
+        수정2 : 그냥 array 사용해보게 수정
+
      */
 
     public static void main(String[] args) throws IOException {
         int N = readInt();
         int K = readInt();
 
-        HashMap<Integer, Integer> cases = new HashMap<>();
-        cases.put(0,0); // 초기값 대입
+        int[] cases = new int[K + 1];
 
-        for(int i=0;i<N;i++){
+        for (int i = 0; i < N; i++) {
             int W = readInt();  // 물품 무게
             int V = readInt();  // 물품 가치
 
-            // 경우의 수 변화를 담기 위한 임시 map
-            HashMap<Integer, Integer> tmpCases = new HashMap<>(cases.size(), 1);
+            if(W > K) continue;
 
-            for(Map.Entry<Integer, Integer> entry : cases.entrySet()){
-                int weight = entry.getKey() + W;
-                int value = entry.getValue() + V;
-
-                // 1. 한계무계를 넘지 않아야 하고
-                // 2. 해당 무게의 case가 없거나     (true일 경우, 바로 통과하므로 get메서드의 null 신경쓰지 않아도 됨)
-                // 3. case가 있다면 무게 값이 업데이트 가능하거나
-                if(weight <= K && (!cases.containsKey(weight) || value > cases.get(weight))){
-                   tmpCases.put(weight, value);
+            for (int j = K; j > W; j--) {
+                if (cases[j - W] != 0) {
+                    cases[j] = Math.max(cases[j], cases[j - W] + V);
                 }
             }
-            // 경우의 수 변화 반영
-            cases.putAll(tmpCases);
+            cases[W] = Math.max(cases[W], V);
         }
 
         // Map을 iterate하면서 최대 가치 합 구함
         int maxValue = 0;
-        for(int value : cases.values()) maxValue = Math.max(maxValue, value);
+        for (int value : cases) maxValue = Math.max(maxValue, value);
         System.out.println(maxValue);
     }
 
