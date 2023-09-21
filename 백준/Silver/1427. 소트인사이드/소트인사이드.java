@@ -1,5 +1,4 @@
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
 
 class Main {
     /*  정렬
@@ -11,10 +10,20 @@ class Main {
         StringBuilder sb = new StringBuilder();
 
         int lastIdx = readDigits();
-        Arrays.sort(array, 0, lastIdx + 1);
+        int tmp = 0;
+
+        for(int i=0;i<= lastIdx;i++){
+            for(int j=i;j<=lastIdx;j++){
+                if(array[i]<array[j]){
+                    tmp = array[i];
+                    array[i]= array[j];
+                    array[j] = tmp;
+                }
+            }
+        }
 
         // array의 각 index에 저장된 숫자의 'ascii' 숫자대로, 해당 digit을 print
-        for(int i = lastIdx; i>=0; i--) System.out.write(array[i]);
+        for(int i = 0; i<=lastIdx; i++) System.out.write(array[i]);
         System.out.flush();
     }
 
