@@ -33,8 +33,7 @@ public class Main {
         for(String word : words){
             if(tmp.equals(word)) continue;
             tmp = word;
-            bw.write(word);
-            bw.newLine();
+            sb.append(word).append("\n");
         }
         bw.write(sb.toString());    bw.flush();     bw.close();
     }
