@@ -1,31 +1,22 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.StringTokenizer;
 
 class Main {
     /*  정렬
      * */
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
         StringBuilder sb = new StringBuilder();
 
-//        int N = nextInt();
-        int N = Integer.parseInt(br.readLine());
+        int N = nextInt();
         Student[] students = new Student[N];
         // 학생 배열에 학생 정보 저장
-//        for (int i = 0; i < N; i++) students[i] = new Student(nextString(), nextInt(), nextInt(), nextInt());
-        for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            students[i] = new Student(st.nextToken(), Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
-        }
+        for (int i = 0; i < N; i++) students[i] = new Student(nextString(), nextInt(), nextInt(), nextInt());
 
         // 학생 정렬 및 출력
         Arrays.sort(students);
         for (int i = 0; i < N; i++) sb.append(students[i].name).append('\n');
+        sb.deleteCharAt(sb.toString().length() - 1);
         System.out.print(sb);
     }
 
@@ -58,7 +49,7 @@ class Main {
         byte c;
         while ((c = read()) <= 32) ;
         do sb.append((char) c);
-        while (65 < (c = read()) && c < 122);
+        while (64 < (c = read()) && c < 123);
         return sb.toString();
     }
 
