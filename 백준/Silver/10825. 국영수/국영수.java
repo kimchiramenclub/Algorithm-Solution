@@ -1,23 +1,75 @@
 import java.io.IOException;
-import java.util.Arrays;
 
 class Main {
     /*  정렬
+
+         - Heap을 쓰면 얼마나 빨라지는 지 체크 위해 https://www.acmicpc.net/source/66032163 이분 코드 참고
      * */
 
     public static void main(String[] args) throws IOException {
         StringBuilder sb = new StringBuilder();
 
         int N = nextInt();
-        Student[] students = new Student[N];
+        Heap heap = new Heap(N);
         // 학생 배열에 학생 정보 저장
-        for (int i = 0; i < N; i++) students[i] = new Student(nextString(), nextInt(), nextInt(), nextInt());
+        for (int i = 0; i < N; i++) heap.offer(new Student(nextString(), nextInt(), nextInt(), nextInt()));
 
         // 학생 정렬 및 출력
-        Arrays.sort(students);
-        for (int i = 0; i < N; i++) sb.append(students[i].name).append('\n');
-        sb.deleteCharAt(sb.toString().length() - 1);
+        while (!heap.isEmpty()) sb.append(heap.poll()).append('\n');
         System.out.print(sb);
+    }
+
+    static class Heap {
+        Student[] stu;
+        int size;
+
+        Heap(int capacity) {
+            stu = new Student[capacity + 1];
+        }
+
+        private void swap(int i1, int i2) {
+            Student tmp = stu[i1];
+            stu[i1] = stu[i2];
+            stu[i2] = tmp;
+        }
+
+        public boolean offer(Student s) {
+            stu[++size] = s;
+
+            int idx = size;
+
+            while (idx >> 1 > 0 && stu[idx >> 1].compareTo(stu[idx]) > 0) {
+                swap(idx >> 1, idx);
+                idx >>= 1;
+            }
+
+            return true;
+        }
+
+        public String poll() {
+            int idx = 1;
+            Student res = stu[idx];
+            stu[idx] = stu[size];
+            stu[size--] = null;
+
+            while ((idx <<= 1) <= size) {
+                if (stu[idx + 1] != null)
+                    idx = stu[idx].compareTo(stu[idx + 1]) < 0 ? idx : idx + 1;
+
+                if (stu[idx >> 1].compareTo(stu[idx]) <= 0)
+                    break;
+
+                swap(idx >> 1, idx);
+            }
+
+            return res.name;
+        }
+
+        public boolean isEmpty() {
+            if (size == 0)
+                return true;
+            return false;
+        }
     }
 
     static class Student implements Comparable<Student> {
