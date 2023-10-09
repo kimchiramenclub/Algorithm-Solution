@@ -26,7 +26,6 @@ class Main {
         // 학생 정렬 및 출력
         Arrays.sort(students);
         for (int i = 0; i < N; i++) sb.append(students[i].name).append('\n');
-        sb.deleteCharAt(sb.toString().length() - 1);
         System.out.print(sb);
     }
 
