@@ -62,7 +62,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        int N = readInt();  int M = readInt(); int K = readInt();
+        int N = readInt(), M = readInt(), K = readInt();
         int[][] board = new int[N][M];
 
         for (int i = 0; i < N; i++) {
@@ -70,7 +70,6 @@ public class Main {
                 if((i+j)%2 == 0) board[i][j] = readChar() ? 0 : 1;
                 else board[i][j] = readChar() ? 1 : 0;
             }
-            readChar();
         }
         System.out.println(solution(N, M, K, board) + "\n");
     }
@@ -83,14 +82,32 @@ public class Main {
         else return total;
     }
 
-    static boolean readChar() throws IOException {
-        return System.in.read() == 'W';
+    // 입력 관련
+    static int idx, size, SIZE = 1 << 13;
+    static byte[] buf = new byte[SIZE];
+
+    // 문자 입력 읽기
+    static boolean readChar() throws IOException{
+        byte c;
+        while ((c = read()) <= 32); // whitespace를 넘기면서, B나 W가 나오면 저장하고 whitespace가 아니므로 stop
+        return c == 'W';    // W면 true, B면 false 반환
     }
 
-    // 입력에서 숫자를 읽는 메서드
+    // 숫자 입력 읽기
     static int readInt() throws IOException {
-        int c, n = 0;
-        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        int n = 0;
+        byte c;
+        while ((c = read()) <= 32) ;
+        do n = (n << 3) + (n << 1) + (c & 15);
+        while (47 < (c = read()) && c < 58);
         return n;
+    }
+
+    static byte read() throws IOException {
+        if (size == idx) {
+            size = System.in.read(buf, idx = 0, SIZE);
+            if (size < 0) buf[0] = -1;
+        }
+        return buf[idx++];
     }
 }
