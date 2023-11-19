@@ -3,6 +3,9 @@ import java.util.Arrays;
 
 public class Main {
     /*  이분탐색
+    
+            문제 : 답이 INT_MAX인 경우, lo = mid + 1로 lo 값이 INT_MIN 값으로 가버려서 시간초과.
+            수정 : lo = INT_MAX 일 경우, 1을 더하지 않고 답으로 제출하게
      * */
 
     static final int max = Integer.MAX_VALUE;
