@@ -9,20 +9,19 @@ public class Main {
 
         br.readLine();
         String word = br.readLine();
-        
-        long sum = 0L;
-        int num = 0;
+
+        long num = 0L, sum = 0L;
         char c;
-        for (int i = 0; i < word.length(); i++){
-            if(word.charAt(i) >= '0' && word.charAt(i) <= '9') {
-                while ((c = word.charAt(i)) >= '0' && c <= '9') {
-                    num = (num << 3) + (num << 1) + (c & 15);
-                    if(++i >= word.length()) break;
-                }
+        for (int i = 0; i < word.length(); i++) {
+            if ((c = word.charAt(i)) >= 48 && c <= 57) {
+                num = (num << 3) + (num << 1) + (c & 15);
+            } else if (num > 0) {
                 sum += num;
-                num = 0;
+                num = 0L;
             }
         }
+        
+        if (num > 0) sum += num;
 
         System.out.println(sum);
     }
